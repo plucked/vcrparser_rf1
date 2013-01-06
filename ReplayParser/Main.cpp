@@ -6,33 +6,31 @@
 
 #include "model/replay_parser.h"
 #include "model/Replay.h"
+#include "controller/ReplayFilterUtil.h"
 
 int main(int argC, char* argV)
 {
 	Replay::Shared replay = ReplayParser::LoadFromFile("C:\\Games\\rFactor_2012\\ReplayFridge\\Replays\\Spanien_Rennen.Vcr");
 
-	// try to detect the start of a race 
-	float countdownAt = -1.0f;
-	float greenAt = -1.0f;
+	ReplayFilterUtil filter(replay);
 
-	for(int i = 0; i < replay->eventGroups.size(); ++i)
-		for(int j = 0; j < replay->eventGroups[i]->unkown_events.size(); ++j)
-		{
-			ReplayEventUnknown::Shared unknownEvent = replay->eventGroups[i]->unkown_events[j];
-			if (unknownEvent->GetEventFrame()->GetClass() == ECLASS_SYS && unknownEvent->GetEventFrame()->GetType() == EventTypes::ETYPE_COUNTDOWN)
-			{
-				countdownAt = replay->eventGroups[i]->time;
-			}
-			
-			if (unknownEvent->GetEventFrame()->GetClass() == ECLASS_SYS && unknownEvent->GetEventFrame()->GetType() == EventTypes::ETYPE_NEWSTATIONS &&
-				countdownAt != -1.0f && greenAt == -1.0f)
-			{
-				int driver = unknownEvent->GetEventFrame()->GetOwner();
-				greenAt = replay->eventGroups[i]->time;
-			}
-		}
+	if (replay->session == SESSION_RACE)
+		std::cout << "race start at " << filter.GetRaceStartTime() << std::endl;
 
-	std::cout << "count at: " << countdownAt << " green at: " << greenAt << std::endl;
+	/*for(int i = 0; i < replay->eventGroups.size(); ++i)
+	for(int j = 0; j < replay->eventGroups[i]->scoreboard_events.size(); ++j)
+	{
+	ReplayEventScoreboard::Shared score = replay->eventGroups[i]->scoreboard_events[j];
+	std::vector<u_char> places = score->GetPlaces();
+	std::cout << "Places" << std::endl;
+	std::vector<u_char>::iterator it = places.begin();
+	std::vector<u_char>::const_iterator itEnd = places.end();
+	for(; it != itEnd; ++it)
+	{
+	ReplayDriver::Shared driver = filter.GetDriver(*it);
+	if (driver) std::cout << "Driver: " << driver->name << std::endl;
+	}
+	}*/
 
 	ReplayParser::SaveToFile(*replay.get(), "C:\\Games\\rFactor_2012\\ReplayFridge\\Replays\\merge_saved.vcr");
 	std::cout << replay->eventGroups.size() << std::endl;

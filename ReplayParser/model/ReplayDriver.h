@@ -13,6 +13,7 @@ class ReplayDriver
 {
 public:
 	typedef boost::shared_ptr<ReplayDriver> Shared;
+	typedef vector<ReplayDriver::Shared> t_DriverContainer;
 
 	char slotId;
 	string name;

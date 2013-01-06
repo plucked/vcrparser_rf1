@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="controller\ReplayFilterUtil.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -19,6 +20,7 @@
     <ClCompile Include="model\replay_parser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="controller\ReplayFilterUtil.h" />
     <ClInclude Include="model\BinaryStreamUtil.h" />
     <ClInclude Include="model\format_constants.h" />
     <ClInclude Include="model\ReplayCamera.h" />

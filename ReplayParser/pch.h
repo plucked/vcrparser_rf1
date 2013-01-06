@@ -16,6 +16,7 @@
 #include <stdint.h>
 #include <iostream>
 #include <math.h>
+#include <map>
 
 #include <boost/iostreams/stream_buffer.hpp>
 #include <boost/iostreams/device/array.hpp>

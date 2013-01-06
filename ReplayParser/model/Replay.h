@@ -30,7 +30,8 @@ public:
 	SessionTypes session;
 	u_short race_time;
 
-	vector<ReplayDriver::Shared> driver;
+	
+	ReplayDriver::t_DriverContainer driver;
 
 	float replay_playback_position;
 	int unknown_integer_1;

@@ -24,7 +24,8 @@ public:
 
 	float time;
 
-	vector<ReplayEventUnknown::Shared> unkown_events;
+	typedef vector<ReplayEventUnknown::Shared> t_unknown_events_container;
+	t_unknown_events_container unkown_events;
 	vector<ReplayEventCheckpoint::Shared> checkpoint_events;
 	vector<ReplayEventScoreboard::Shared> scoreboard_events;
 	vector<ReplayEventZipLoc::Shared> ziploc_events;
