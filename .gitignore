@@ -7,5 +7,4 @@
 *.o
 *.so
 
-ReplayParser\Debug
-
+ReplayParser\Debug*
