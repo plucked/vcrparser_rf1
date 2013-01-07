@@ -14,11 +14,18 @@ class ReplayFilterUtil
 public:
 	ReplayFilterUtil(Replay::Shared replay);
 
+	ReplayDriver::Shared GetDriver(u_char slotId);
+	ReplayDriver::Shared GetDriver(const std::string& name);
+	void RemoveDriver(u_char slotId);
 
-	ReplayDriver::Shared GetDriver(int slotId);
+	Replay::t_EventGroupContainer GetEventGroupsInFrame(float start = 0, float end = FLT_MAX);
+	void RemoveEventGroupsInFrame(float start = 0, float end = FLT_MAX);
+	void RemoveEventsFromDriver(u_char slotId, ReplayEventGroup::Shared& eventGroup);
+
 	float GetRaceStartTime();
 protected:
 	void FillDriverList();
+	
 
 
 	Replay::Shared m_Replay;

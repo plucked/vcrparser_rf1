@@ -17,6 +17,8 @@ int main(int argC, char* argV)
 	if (replay->session == SESSION_RACE)
 		std::cout << "race start at " << filter.GetRaceStartTime() << std::endl;
 
+	filter.RemoveDriver(filter.GetDriver("Rainer Heynke")->slotId);
+
 	/*for(int i = 0; i < replay->eventGroups.size(); ++i)
 	for(int j = 0; j < replay->eventGroups[i]->scoreboard_events.size(); ++j)
 	{

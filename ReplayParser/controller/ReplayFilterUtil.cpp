@@ -12,12 +12,83 @@ ReplayFilterUtil::ReplayFilterUtil( Replay::Shared replay )
 	FillDriverList();
 }
 
-ReplayDriver::Shared ReplayFilterUtil::GetDriver( int slotId )
+ReplayDriver::Shared ReplayFilterUtil::GetDriver( u_char slotId )
 {
 	t_DriverContainer::iterator findIt = m_DriverContainer.find(slotId);
 	if (findIt != m_DriverContainer.end()) return findIt->second;
 	return ReplayDriver::Shared();
 }
+
+ReplayDriver::Shared ReplayFilterUtil::GetDriver( const std::string& name )
+{
+	foreach(ReplayDriver::Shared& driver, m_Replay->driver)
+	{
+		if (driver->name == name) return driver;
+	}
+
+	return ReplayDriver::Shared();
+}
+
+void ReplayFilterUtil::RemoveDriver( u_char slotId )
+{
+	// Remove the driver
+	ReplayDriver::t_DriverContainer::iterator it = m_Replay->driver.begin();
+	ReplayDriver::t_DriverContainer::const_iterator itEnd = m_Replay->driver.end();
+	for(; it != itEnd; ++it)
+	{
+		if ((*it)->slotId == slotId) 
+		{
+			m_Replay->driver.erase(it);
+			break;
+		}
+	}
+
+	// Remove from the easy access container
+	t_DriverContainer::iterator findIt = m_DriverContainer.find(slotId);
+	if (findIt != m_DriverContainer.end()) m_DriverContainer.erase(findIt);
+
+	// Remove the events
+	foreach(ReplayEventGroup::Shared& group, m_Replay->eventGroups)
+	{
+		group->RemoveEventsFromDriver(slotId);
+	}
+}
+
+Replay::t_EventGroupContainer ReplayFilterUtil::GetEventGroupsInFrame( float start /*= 0*/, float end /*= FLT_MAX*/ )
+{
+	Replay::t_EventGroupContainer result;
+
+	foreach(ReplayEventGroup::Shared& group, m_Replay->eventGroups)
+	{
+		if (group->time >= start && group->time < end) result.push_back(group);
+	}
+
+	return result;
+}
+
+
+void ReplayFilterUtil::RemoveEventGroupsInFrame( float start /*= 0*/, float end /*= FLT_MAX*/ )
+{
+	Replay::t_EventGroupContainer::iterator it = m_Replay->eventGroups.begin();
+	Replay::t_EventGroupContainer::const_iterator itEnd = m_Replay->eventGroups.end();
+
+	for(; it != itEnd; )
+	{
+		ReplayEventGroup::Shared& group = *it;
+		if (group->time >= start && group->time < end)
+		{
+			it = m_Replay->eventGroups.erase(it);
+			itEnd = m_Replay->eventGroups.end();
+		}
+		else ++it;
+	}
+}
+
+void ReplayFilterUtil::RemoveEventsFromDriver( u_char slotId, ReplayEventGroup::Shared& eventGroup )
+{
+	eventGroup->RemoveEventsFromDriver(slotId);
+}
+
 
 float ReplayFilterUtil::GetRaceStartTime()
 {
@@ -63,3 +134,4 @@ void ReplayFilterUtil::FillDriverList()
 		m_DriverContainer.insert(t_DriverPair(it->get()->slotId, *it));
 	}
 }
+

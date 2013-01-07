@@ -26,11 +26,47 @@ public:
 
 	typedef vector<ReplayEventUnknown::Shared> t_unknown_events_container;
 	t_unknown_events_container unkown_events;
-	vector<ReplayEventCheckpoint::Shared> checkpoint_events;
-	vector<ReplayEventScoreboard::Shared> scoreboard_events;
-	vector<ReplayEventZipLoc::Shared> ziploc_events;
-	vector<ReplayEventVFX::Shared> vfx_events;
-	vector<ReplayEventSFX::Shared> sfx_events;
+
+	typedef vector<ReplayEventCheckpoint::Shared> t_checkpoint_events_container;
+	t_checkpoint_events_container checkpoint_events;
+
+	typedef vector<ReplayEventScoreboard::Shared> t_scoreboard_events_container;
+	t_scoreboard_events_container scoreboard_events;
+
+	typedef vector<ReplayEventZipLoc::Shared> t_ziploc_events_container;
+	t_ziploc_events_container ziploc_events;
+
+	typedef vector<ReplayEventVFX::Shared> t_vfx_events_container;
+	t_vfx_events_container vfx_events;
+
+	typedef vector<ReplayEventSFX::Shared> t_sfx_events_container;
+	t_sfx_events_container sfx_events;
+
+	void RemoveEventsFromDriver( u_char slotId )
+	{
+		RemoveFromContainer<t_unknown_events_container>(slotId, unkown_events);
+		RemoveFromContainer<t_checkpoint_events_container>(slotId, checkpoint_events);
+		RemoveFromContainer<t_scoreboard_events_container>(slotId, scoreboard_events);
+		RemoveFromContainer<t_ziploc_events_container>(slotId, ziploc_events);
+		RemoveFromContainer<t_vfx_events_container>(slotId, vfx_events);
+		RemoveFromContainer<t_sfx_events_container>(slotId, sfx_events);
+	}
+
+	template<typename T> 
+	void RemoveFromContainer(u_char slotId, T& container)
+	{
+		T::iterator it = container.begin();
+		T::const_iterator itEnd = container.end();
+		for(; it != itEnd; ) 
+		{
+			if ((*it)->GetEventFrame()->GetOwner() == slotId)
+			{
+				it = container.erase(it);
+				itEnd = container.end();
+			}
+			else ++it;
+		}
+	}
 
 	static ReplayEventGroup::Shared ReadFromStream(istream& stream) 
 	{
@@ -68,7 +104,6 @@ public:
 				{
 					int i = 0;
 				}
-				//printf_s("Unknown event %d:%d\n", event_frame.GetClass(), event_frame.GetType());
 				ReplayEventUnknown::Shared unknown_event( new ReplayEventUnknown(event_frame));
 				result->unkown_events.push_back(unknown_event);
 				break;
@@ -93,13 +128,9 @@ public:
 			{
 				ReplayEventZipLoc::Shared ziploc_event( new ReplayEventZipLoc(event_frame));
 				result->ziploc_events.push_back(ziploc_event);
-
-				//if (event_frame.GetOwner() == 15)
-				//printf_s("Driver: %d RPS: %d Gear: %d \n", event_frame.GetOwner(), ziploc_event.GetCurrentRPS(), event_frame.GetType() - EventTypes::ETYPE_ZIPLOC_N);
 				break;
 			}	
 		default:
-			//printf_s("Unknown loc event %d:%d\n", event_frame.GetClass(), event_frame.GetType());
 			ReplayEventUnknown::Shared unknown_event( new ReplayEventUnknown(event_frame));
 			result->unkown_events.push_back(unknown_event);
 			break;
@@ -114,22 +145,15 @@ public:
 			{
 				ReplayEventCheckpoint::Shared checkpoint_event( new ReplayEventCheckpoint(event_frame));
 				result->checkpoint_events.push_back(checkpoint_event);
-
-				//if (checkpoint_event->GetLapTime() > 0.0f)
-				//	printf_s("Checkpoint for driver [%d] in sector %d with laptime %f (%d)\n",  checkpoint_event->GetEventFrame()->GetOwner(), checkpoint_event->GetSector(), checkpoint_event->GetLapTime(), checkpoint_event->GetLap());
 				break;
 			}
 		case EventTypes::ETYPE_SCOREBOARD:
 			{
 				ReplayEventScoreboard::Shared scoreboard_event( new ReplayEventScoreboard(event_frame));
 				result->scoreboard_events.push_back(scoreboard_event);
-
-				//if (scoreboard_event.GetBestLapSectors()[0] > 0.0f)
-				//	printf_s("Score for driver [%d] %f %f %f\n",  scoreboard_event.GetEventFrame().GetOwner(), scoreboard_event.GetBestLapSectors()[0], scoreboard_event.GetBestLapSectors()[1], scoreboard_event.GetBestLapSectors()[2]);
 				break;
 			}	
 		default:
-			//printf_s("Unknown sys event %d:%d\n", event_frame.GetClass(), event_frame.GetType());
 			ReplayEventUnknown::Shared unknown_event( new ReplayEventUnknown(event_frame));
 			result->unkown_events.push_back(unknown_event);
 			break;

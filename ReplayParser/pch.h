@@ -26,6 +26,9 @@
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/foreach.hpp>
+
+#define foreach(a, b) BOOST_FOREACH(a, b)
 
 namespace io = boost::iostreams;
 using namespace std;
