@@ -73,6 +73,7 @@ public:
 
 	u_long GetOwner() const { return GetEventOwner(header); }
 	u_long GetSize() const { return GetEventSize(header); }
+	void SetSize(u_long size) { header = SetEventSize(size, header); }
 	u_long GetType() const { return GetEventType(header); }
 	u_long GetGameSession() const { return GetEventSession(header); }
 	EventFlags GetFlag() const { return GetEventFlag(header); }
@@ -80,6 +81,59 @@ public:
 
 	u_char GetEventTimeAdjustment() const { return eventTimeAdjustment; }
 	char* GetEventData() const { return event_data; } 
+	void RemoveFromEventData(u_int offset, u_int size)
+	{
+		u_int newSize = GetSize() - size;
+		char* newData = new char[newSize];
+
+		if (offset == 0)
+		{
+			memcpy(newData, event_data + size, newSize);
+		}
+		else if (offset + size < GetSize())
+		{
+			memcpy(newData, event_data, offset);
+			memcpy(newData + offset, event_data + offset + size, GetSize() - offset - size);
+		}
+		else
+		{
+			memcpy(newData, event_data, newSize);
+		}
+		delete[] event_data;
+		event_data = newData;
+		unsigned long oldSize = GetSize();
+		SetSize(newSize);
+		u_long modSize = GetSize();
+		int i = 0;
+	}
+	
+	void InsertToEventData(u_int offset, u_int size, char* data)
+	{
+		u_int newSize = GetSize() + size;
+		char* newData = new char[newSize];
+		if (offset == 0)
+		{
+			memcpy(newData, data, size);
+			memcpy(newData + size, event_data, GetSize());
+		}
+		else if (offset + size < GetSize())
+		{
+			memcpy(newData, event_data, offset);
+			memcpy(newData + offset, data, size);
+			memcpy(newData + size + offset, event_data + offset, GetSize() - offset);
+		}
+		else
+		{
+			memcpy(newData, event_data, GetSize());
+			memcpy(newData + GetSize(), data, size);
+		}
+		delete[] event_data;
+		event_data = newData;
+		unsigned long oldSize = GetSize();
+		SetSize(newSize);
+		u_long modSize = GetSize();
+		int i = 0;
+	}
 protected:
 	u_long header;
 	u_char eventTimeAdjustment;

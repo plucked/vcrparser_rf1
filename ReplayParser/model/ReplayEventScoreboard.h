@@ -25,6 +25,17 @@ public:
 	void SetBestLapSectors(const std::vector<float>& sectors) { BinaryStreamUtil::SetBits<float>(sectors, 0, GetEventFrame()->GetEventData()); }
 
 	std::vector<u_char> GetPlaces() const { return BinaryStreamUtil::GetBits<u_char>(GetEventFrame()->GetSize() - 12, 12, GetEventFrame()->GetEventData()); }
+	void SetPlaces(const std::vector<u_char>& places)
+	{
+		char* insertData = new char[places.size()];
+		int offset = 0;
+		foreach(const u_char& place, places) insertData[offset++] = place;
+
+		GetEventFrame()->RemoveFromEventData(12, GetEventFrame()->GetSize() - 12);
+		GetEventFrame()->InsertToEventData(12, places.size(), insertData);
+
+		delete[] insertData;
+	}
 protected:
 	float best_lap_sectors[3];
 };

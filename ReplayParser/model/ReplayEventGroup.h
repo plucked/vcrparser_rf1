@@ -50,6 +50,25 @@ public:
 		RemoveFromContainer<t_ziploc_events_container>(slotId, ziploc_events);
 		RemoveFromContainer<t_vfx_events_container>(slotId, vfx_events);
 		RemoveFromContainer<t_sfx_events_container>(slotId, sfx_events);
+
+		t_scoreboard_events_container::iterator scoreIt = scoreboard_events.begin();
+		t_scoreboard_events_container::const_iterator scoreItEnd = scoreboard_events.end();
+		for(; scoreIt != scoreItEnd; ++scoreIt)
+		{
+			ReplayEventScoreboard::Shared score = *scoreIt;
+			std::vector<u_char> places = score->GetPlaces();
+			std::vector<u_char>::iterator it = places.begin();
+			std::vector<u_char>::const_iterator itEnd = places.end();
+			for(; it != itEnd; ++it)
+			{
+				if (*it == slotId)
+				{
+					places.erase(it);
+					break;
+				}
+			}
+			score->SetPlaces(places);
+		}
 	}
 
 	template<typename T> 
