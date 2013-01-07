@@ -34,6 +34,7 @@
     <ClInclude Include="model\ReplayEventUnknown.h" />
     <ClInclude Include="model\ReplayEventVFX.h" />
     <ClInclude Include="model\ReplayEventZipLoc.h" />
+    <ClInclude Include="model\Vector3.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="model\replay_parser.h" />
     <ClInclude Include="model\Replay.h" />

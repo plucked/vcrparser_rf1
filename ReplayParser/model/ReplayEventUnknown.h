@@ -17,7 +17,7 @@ public:
 	ReplayEventUnknown(ReplayEventFrame::Shared replayEventFrame)
 		: eventFrame(replayEventFrame)
 	{
-
+		
 	}
 
 	const ReplayEventFrame::Shared& GetEventFrame() const { return eventFrame; }

@@ -222,18 +222,21 @@ enum SessionTypes : u_char
 
 namespace
 {
+	template<typename T>
+	long ChangeBinary(T value, long header, int mask, int shift)
+	{
+		return ((value & mask) << shift) |  (header & (_I32_MAX - (mask << shift)));
+	}
+
 	EventClass GetEventClass(u_long header) { return (EventClass) ( header >> 29 ); }
 	EventFlags GetEventFlag(u_long header) { return (EventFlags) ((header >> 27) & 0x03 ); }
 	u_long GetEventSession(u_long header) { return ((header >> 24) & 0x07 ); }
 	int GetEventType(u_long header) { return (int) ((header >> 18) & 0x03f ); }
 	u_long GetEventSize(u_long header) { return ((header >> 8 ) & 0x03ff); }
-	u_long SetEventSize(u_long size, u_long header)
-	{
-		u_long temp = (size & 0x03ff) << 8;
-		temp |= header & (0xFFFFFFFF - (0x03FF << 8));
-		return temp;
-	}
+	u_long SetEventSize(u_long size, u_long header) { return ChangeBinary<u_long>(size, header, 0x03FF, 8); }
 	u_long GetEventOwner(u_long header) { return ( header & 0x0ff ); }
+
+	
 }
 
 

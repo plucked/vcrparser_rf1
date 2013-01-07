@@ -4,7 +4,7 @@
 	This software is licensed with the cc-by license (http://creativecommons.org/licenses/by/3.0/)
 */
 #include "ReplayFilterUtil.h"
-
+#include "../model/Vector3.h"
 
 ReplayFilterUtil::ReplayFilterUtil( Replay::Shared replay ) 
 	: m_Replay(replay)
@@ -102,8 +102,8 @@ float ReplayFilterUtil::GetRaceStartTime()
 	{
 		ReplayEventGroup::Shared group = *it;
 		
-		ReplayEventGroup::t_unknown_events_container::iterator itUnknown = group->unkown_events.begin();
-		ReplayEventGroup::t_unknown_events_container::const_iterator itEndUnknown = group->unkown_events.end();
+		ReplayEventGroup::t_unknown_events_container::iterator itUnknown = group->events.unkown_events.begin();
+		ReplayEventGroup::t_unknown_events_container::const_iterator itEndUnknown = group->events.unkown_events.end();
 		for(; itUnknown != itEndUnknown; ++itUnknown)
 		{
 			ReplayEventUnknown::Shared unknownEvent = *itUnknown;
@@ -124,6 +124,56 @@ float ReplayFilterUtil::GetRaceStartTime()
 
 	return greenAt;
 }
+
+float ReplayFilterUtil::GetDriverDistance( u_char slotId )
+{
+	Vector3 last;
+
+	bool first = true;
+	float total = 0;
+
+	float lastEventGroupTime;
+
+	Replay::t_EventGroupContainer::iterator it = m_Replay->eventGroups.begin();
+	Replay::t_EventGroupContainer::const_iterator itEnd = m_Replay->eventGroups.end();
+	for(; it != itEnd; ++it)
+	{
+		ReplayEventGroup::Shared group = *it;
+
+		ReplayEventGroup::t_ziploc_events_container::iterator itZip = group->events.ziploc_events.begin();
+		ReplayEventGroup::t_ziploc_events_container::const_iterator itZipEnd = group->events.ziploc_events.end();
+		for(; itZip != itZipEnd; ++itZip)
+		{
+			ReplayEventZipLoc::Shared zip = *itZip;
+			if (zip->GetEventFrame()->GetOwner() == slotId && zip->GetCurrentRPS() > 0)
+			{
+				Vector3 current = Vector3( zip->GetPosX(), zip->GetPosY(), zip->GetPosZ());
+				if (first)
+				{
+					first = false;
+				}
+				else
+				{
+					float timeDiff = group->time - lastEventGroupTime;
+					float distance = Vector3::Distance(last, current);
+
+					if (distance < 1000.0) // if the distance is more then 1km, there is a paket loss (disconnect?!)
+					{
+						// kilometer per hour
+						float kmh = 3600.0f / timeDiff * distance / 1000.0f;
+						total += distance;
+					}
+					else first = true;
+				}
+				last = current;
+			}
+		}
+
+		lastEventGroupTime = group->time;
+	}
+	return total;
+}
+
 
 void ReplayFilterUtil::FillDriverList()
 {

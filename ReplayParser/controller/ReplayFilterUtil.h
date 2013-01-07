@@ -23,6 +23,8 @@ public:
 	void RemoveEventsFromDriver(u_char slotId, ReplayEventGroup::Shared& eventGroup);
 
 	float GetRaceStartTime();
+
+	float GetDriverDistance(u_char slotId);
 protected:
 	void FillDriverList();
 	

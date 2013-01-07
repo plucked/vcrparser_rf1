@@ -17,7 +17,15 @@ int main(int argC, char* argV)
 	if (replay->session == SESSION_RACE)
 		std::cout << "race start at " << filter.GetRaceStartTime() << std::endl;
 
-	filter.RemoveDriver(filter.GetDriver("Rainer Heynke")->slotId);
+	foreach(ReplayDriver::Shared& driver, replay->driver)
+	{
+		std::cout << "distance of "<< driver->name << " is " << filter.GetDriverDistance(driver->slotId) << std::endl;
+	}
+
+	//std::cout << "distance of Benjamin Koehler: " << filter.GetDriverDistance(filter.GetDriver("Benjamin Koehler")->slotId) << std::endl;
+	
+
+	//filter.RemoveDriver(filter.GetDriver("Rainer Heynke")->slotId);
 
 	/*for(int i = 0; i < replay->eventGroups.size(); ++i)
 	for(int j = 0; j < replay->eventGroups[i]->scoreboard_events.size(); ++j)
@@ -34,7 +42,7 @@ int main(int argC, char* argV)
 	}
 	}*/
 
-	ReplayParser::SaveToFile(*replay.get(), "C:\\Games\\rFactor_2012\\ReplayFridge\\Replays\\merge_saved.vcr");
+	//ReplayParser::SaveToFile(*replay.get(), "C:\\Games\\rFactor_2012\\ReplayFridge\\Replays\\merge_saved.vcr");
 	std::cout << replay->eventGroups.size() << std::endl;
 	return 0;
 }

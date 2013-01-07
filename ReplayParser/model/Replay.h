@@ -162,12 +162,12 @@ public:
 		int sfx_events = 0;
 		for(u_int i = 0; i < eventGroups.size(); ++i)
 		{
-			unkown_events += eventGroups[i]->unkown_events.size();
-			checkpoint_events += eventGroups[i]->checkpoint_events.size();
-			scoreboard_events += eventGroups[i]->scoreboard_events.size();
-			ziploc_events += eventGroups[i]->ziploc_events.size();
-			vfx_events += eventGroups[i]->vfx_events.size();
-			sfx_events += eventGroups[i]->sfx_events.size();
+			unkown_events += eventGroups[i]->events.unkown_events.size();
+			checkpoint_events += eventGroups[i]->events.checkpoint_events.size();
+			scoreboard_events += eventGroups[i]->events.scoreboard_events.size();
+			ziploc_events += eventGroups[i]->events.ziploc_events.size();
+			vfx_events += eventGroups[i]->events.vfx_events.size();
+			sfx_events += eventGroups[i]->events.sfx_events.size();
 		}
 		std::cout << "unknown_events: " << unkown_events << std::endl;
 		std::cout << "checkpoint_events: " << checkpoint_events << std::endl;
@@ -177,6 +177,16 @@ public:
 		std::cout << "sfx_events: " << sfx_events << std::endl;
 		std::cout << "total event groups: " << eventGroups.size() << std::endl;
 		std::cout << "total events: " << GetEventCount() << std::endl;
+
+		/*for(u_int i = 0; i < eventGroups.size(); ++i)
+		{
+			for(u_int j = 0; j < eventGroups[i]->unkown_events.size(); ++j)
+			{
+				ReplayEventUnknown::Shared unknown = eventGroups[i]->unkown_events[j];
+				std::cout << "Unknown Event [Class: " << unknown->GetEventFrame()->GetClass() << " Type: " << unknown->GetEventFrame()->GetType() << " Owner: " << unknown->GetEventFrame()->GetOwner() << "]" << std::endl;
+			}
+		}*/
+		
 	}
 protected:
 

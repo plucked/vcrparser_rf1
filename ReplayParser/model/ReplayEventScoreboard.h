@@ -27,6 +27,8 @@ public:
 	std::vector<u_char> GetPlaces() const { return BinaryStreamUtil::GetBits<u_char>(GetEventFrame()->GetSize() - 12, 12, GetEventFrame()->GetEventData()); }
 	void SetPlaces(const std::vector<u_char>& places)
 	{
+		std::vector<u_char> oldplaces = GetPlaces();
+
 		char* insertData = new char[places.size()];
 		int offset = 0;
 		foreach(const u_char& place, places) insertData[offset++] = place;
@@ -35,6 +37,9 @@ public:
 		GetEventFrame()->InsertToEventData(12, places.size(), insertData);
 
 		delete[] insertData;
+	
+		std::vector<u_char> newplaces = GetPlaces();
+		int i = 0;
 	}
 protected:
 	float best_lap_sectors[3];
