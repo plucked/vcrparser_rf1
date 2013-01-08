@@ -17,6 +17,7 @@ int main(int argC, char* argV)
 	if (replay->session == SESSION_RACE)
 		std::cout << "race start at " << filter.GetRaceStartTime() << std::endl;
 
+	
 	foreach(ReplayDriver::Shared& driver, replay->driver)
 	{
 		std::cout << "distance of "<< driver->name << " is " << filter.GetDriverDistance(driver->slotId) << std::endl;
