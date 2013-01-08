@@ -1,21 +1,15 @@
 # Compiled source #
 ###################
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
-*.tlog
-*.obj
-*.lastbuildstate
-*.log
-*.pdb
+
+
 *.suo
 *.opensdf
 *.sdf
-*.pch
 *.user
-*.idb
-*.ipch
+
+ReplayParser/Debug Lib
+ReplayParser/Debug
+ReplayParser/Release Lib
+ReplayParser/Release
+ReplayParser/ipch
 
