@@ -37,7 +37,7 @@ public:
 	template <typename T>
 	static T* ReadArray(istream& stream, istream::pos_type size)
 	{
-		char* buffer = new char[size * sizeof(T)];
+		char* buffer = new char[(int)size * sizeof(T)];
 		stream.read(buffer, size * sizeof(T));
 		T* result = (T*)buffer;
 		return result;
@@ -243,7 +243,7 @@ public:
 	}
 
 	template <typename T>
-	static vector<T> GetBits(int amount, int byteOffset, char* data)
+	static vector<T> GetBits(u_int amount, int byteOffset, char* data)
 	{
 		vector<T> result;
 		for(u_int i = 0; i < amount; ++i)

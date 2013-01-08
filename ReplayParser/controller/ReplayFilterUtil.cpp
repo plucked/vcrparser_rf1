@@ -12,6 +12,14 @@ ReplayFilterUtil::ReplayFilterUtil( Replay::Shared replay )
 	FillDriverList();
 }
 
+DriverStatistic::t_DriverContainer ReplayFilterUtil::GetDriverStatistics()
+{
+	DriverStatistic::t_DriverContainer result;
+
+	return result;
+}
+
+
 ReplayDriver::Shared ReplayFilterUtil::GetDriver( u_char slotId )
 {
 	t_DriverContainer::iterator findIt = m_DriverContainer.find(slotId);

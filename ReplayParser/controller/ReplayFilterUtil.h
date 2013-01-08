@@ -8,11 +8,14 @@
 #define ReplayFilterUtil_h__
 
 #include "../model/Replay.h"
+#include "../statistics/DriverStatistic.h"
 
 class ReplayFilterUtil
 {
 public:
 	ReplayFilterUtil(Replay::Shared replay);
+
+	DriverStatistic::t_DriverContainer GetDriverStatistics();
 
 	ReplayDriver::Shared GetDriver(u_char slotId);
 	ReplayDriver::Shared GetDriver(const std::string& name);

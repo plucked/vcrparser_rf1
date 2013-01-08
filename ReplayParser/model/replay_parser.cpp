@@ -19,7 +19,7 @@ Replay::Shared ReplayParser::LoadFromFile( const std::string& filename )
 		fs.seekg (0, ios::beg);
 
 		// allocate memory:
-		char* buffer = new char [length];
+		char* buffer = new char [(int)length];
 
 		// read data as a block:
 		fs.read (buffer,length);

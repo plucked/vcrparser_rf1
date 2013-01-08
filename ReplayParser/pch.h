@@ -22,7 +22,9 @@
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/stream.hpp>
 #include <boost/iostreams/filtering_streambuf.hpp>
+#pragma warning( disable : 4244)
 #include <boost/iostreams/filter/gzip.hpp>
+#pragma warning( default : 4244)
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/shared_ptr.hpp>
@@ -42,7 +44,7 @@ namespace
 {
 	float round(float r) 
 	{
-		return (r > 0.0) ? floor(r + 0.5) : ceil(r - 0.5);
+		return (r > 0.0f) ? floor(r + 0.5f) : ceil(r - 0.5f);
 	}
 
 }
