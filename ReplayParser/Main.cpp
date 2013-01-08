@@ -7,12 +7,33 @@
 #include "model/replay_parser.h"
 #include "model/Replay.h"
 #include "controller/ReplayFilterUtil.h"
+#include "statistics/StatisticAnalyser.h"
 
 int main(int argC, char* argV)
 {
-	Replay::Shared replay = ReplayParser::LoadFromFile("C:\\Games\\rFactor_2012\\ReplayFridge\\Replays\\Spanien_Rennen.Vcr");
+	Replay::Shared replay = ReplayParser::LoadFromFile("C:\\Games\\rFactor_2012\\ReplayFridge\\Replays\\F1RL Season 2012 - 03 China Grand Prix S4 2.Vcr");
 
-	ReplayFilterUtil filter(replay);
+	StatisticAnalyser statistics(replay);
+	statistics.GenerateStatistics();
+	DriverStatistic::t_DriverContainer driverStats = statistics.GetDriverStatistics();
+	
+	foreach(DriverStatistic::Shared& driver, driverStats)
+	{
+		std::cout << "Laps for " << driver->name << std::endl;
+		foreach(DriverStatisticStint::Shared& stint, driver->m_Stints)
+		{
+			std::cout << "====== STINT ======" << std::endl;
+
+			foreach(Lap::Shared lap, stint->GetLaps())
+			{
+				std::cout << lap->ToString() << std::endl;
+			}
+
+			std::cout << "====== END OF STINT ======" << std::endl;
+		}
+	}
+	int i = 0;
+	/*ReplayFilterUtil filter(replay);
 
 	if (replay->session == SESSION_RACE)
 		std::cout << "race start at " << filter.GetRaceStartTime() << std::endl;
@@ -20,7 +41,7 @@ int main(int argC, char* argV)
 	foreach(ReplayDriver::Shared& driver, replay->driver)
 	{
 		std::cout << "distance of "<< driver->name << " is " << filter.GetDriverDistance(driver->slotId) << std::endl;
-	}
+	}*/
 
 	//std::cout << "distance of Benjamin Koehler: " << filter.GetDriverDistance(filter.GetDriver("Benjamin Koehler")->slotId) << std::endl;
 	

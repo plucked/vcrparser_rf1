@@ -17,6 +17,7 @@
 #include <iostream>
 #include <math.h>
 #include <map>
+#include <sstream>
 
 #include <boost/iostreams/stream_buffer.hpp>
 #include <boost/iostreams/device/array.hpp>
@@ -29,6 +30,7 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/foreach.hpp>
+#include <boost/optional.hpp>
 
 #define foreach(a, b) BOOST_FOREACH(a, b)
 

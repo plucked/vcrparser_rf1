@@ -28,6 +28,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release Lib|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="model\replay_parser.cpp" />
+    <ClCompile Include="statistics\StatisticAnalyser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="controller\ReplayFilterUtil.h" />
@@ -50,6 +51,8 @@
     <ClInclude Include="model\Replay.h" />
     <ClInclude Include="statistics\DriverStatistic.h" />
     <ClInclude Include="statistics\DriverStatisticStint.h" />
+    <ClInclude Include="statistics\Lap.h" />
+    <ClInclude Include="statistics\StatisticAnalyser.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6A675D42-20CE-4C69-A2C9-EEF2D0BB8082}</ProjectGuid>
@@ -116,7 +119,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);D_SCL_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_SCL_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>C:\Development\Dependencies\boost_1_52_0</AdditionalIncludeDirectories>
