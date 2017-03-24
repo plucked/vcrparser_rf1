@@ -11,12 +11,12 @@ Features
 * cameras
 * replay information (length, start, end)
 * eventgroups (time and events)
-* events
-** Event Checkpoint (SYS)
-** Event Scoreboard (SYS)
-** Event SFX (no further parsing of information yet)
-** Event VFX (same as SFX)
-** Event ZipLOC (nearly all information, only few bits left, but the important ones like position and orientation)
+* events:
+  * Event Checkpoint (SYS)
+  * Event Scoreboard (SYS)
+  * Event SFX (no further parsing of information yet)
+  * Event VFX (same as SFX)
+  * Event ZipLOC (nearly all information, only few bits left, but the important ones like position and orientation)
 
 Contribute
 =============
